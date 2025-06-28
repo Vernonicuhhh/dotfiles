@@ -11,3 +11,8 @@
 #### Steps to compile
 	1. cd .vim/plugged/YouCompleteMe
 	2. python3 install.py
+
+### Language Server
+
+1.  pyright
+2. clang
