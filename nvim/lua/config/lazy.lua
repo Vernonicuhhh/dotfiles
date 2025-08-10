@@ -23,16 +23,23 @@ vim.g.maplocalleader = "\\"
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
-	{
-	  "folke/tokyonight.nvim",
-	  lazy = false,
-	  priority = 1000,
-	  opts = {},
-	},
-	{'neovim/nvim-lspconfig', tag = 'v1.8.0', pin = true},
-	{'hrsh7th/cmp-nvim-lsp'},
-	{'hrsh7th/nvim-cmp'},
-	{'nvim-telescope/telescope.nvim', tag = '0.1.8', dependencies = { 'nvim-lua/plenary.nvim' }},
+        {
+          "folke/tokyonight.nvim",
+          lazy = false,
+          priority = 1000,
+          opts = {},
+        },
+        {'neovim/nvim-lspconfig', tag = 'v1.8.0', pin = true},
+        {'hrsh7th/cmp-nvim-lsp'},
+        {'hrsh7th/nvim-cmp'},
+        {'nvim-telescope/telescope.nvim', tag = '0.1.8', dependencies = { 'nvim-lua/plenary.nvim' }},
+        {
+                "L3MON4D3/LuaSnip",
+                -- follow latest release.
+                version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+                -- install jsregexp (optional!).
+                build = "make install_jsregexp"
+        }
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
