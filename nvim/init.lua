@@ -39,25 +39,61 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 require('lspconfig').pyright.setup({})
 require('lspconfig').clangd.setup({})
+
 local cmp = require('cmp')
+local luasnip = require('luasnip')
+
+-- load friendly-snippets if you have them
+require("luasnip.loaders.from_vscode").lazy_load()
 
 cmp.setup({
-  sources = {
-    {name = 'nvim_lsp'},
-  },
   snippet = {
     expand = function(args)
-      -- You need Neovim v0.10 to use vim.snippet
-      vim.snippet.expand(args.body)
+      luasnip.lsp_expand(args.body)
     end,
   },
-  mapping = cmp.mapping.preset.insert({}),
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+  },
+  mapping = cmp.mapping.preset.insert({
+    -- Tab: cycle forward or jump in snippet
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.jumpable(1) then
+        luasnip.jump(1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+
+    -- Shift+Tab: cycle backward or jump in snippet
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+
+    -- Enter: confirm current item
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    }),
+  }),
 })
+
+
+
+
+
 
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
 vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
-
-
